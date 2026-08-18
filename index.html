@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Prediksi Tes TTC BCA 2026 Interaktif</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        .question-card {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .options li {
+            margin-bottom: 8px;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 15px;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+        .option-btn:hover {
+            background: #e2e8f0;
+        }
+        .option-btn.correct {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none;
+        }
+        .feedback.correct {
+            color: #059669;
+        }
+        .feedback.wrong {
+            color: #dc2626;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 10px 0;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            margin-left: 10px;
+        }
+        .submit-btn {
+            background: #0056b3;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background: #003d80;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Simulasi Prediksi Tes TTC BCA 2026</h1>
+    <p><strong>Target:</strong> Minimal 80% Benar | Klik pada pilihan jawaban untuk mengecek hasil secara instan.</p>
+
+    <!-- BAGIAN 1: PILIHAN GANDA 1-100 -->
+    <h2>Bagian I: Soal Pilihan Ganda (1 - 100)</h2>
+    <div id="pg-container"></div>
+
+    <!-- BAGIAN 2: PAKET B PILIHAN GANDA KOMPLEKS -->
+    <h2>Bagian II: Paket B - Pilihan Ganda Kompleks</h2>
+    <p><em>Pilih semua jawaban yang benar, lalu klik "Cek Jawaban".</em></p>
+    <div id="complex-container"></div>
+
+    <!-- BAGIAN 3: PAKET B MENJODOHKAN -->
+    <h2>Bagian III: Paket B - Soal Menjodohkan</h2>
+    <div id="match-container"></div>
+</div>
+
+<script>
+// Data Soal Pilihan Ganda (1 - 100)
+const pgData = [
+    { n: 1, q: "Tujuan utama pendekatan STEM dalam pembelajaran adalah....", opts: ["A. membuat pembelajaran menggunakan komputer", "B. mengintegrasikan sains, teknologi, rekayasa, dan matematika dalam pemecahan masalah", "C. mengganti seluruh pembelajaran konvensional dengan teknologi", "D. membuat siswa menghafalkan konsep sains", "E. menggunakan aplikasi digital sebanyak mungkin"], ans: 1 },
+    { n: 2, q: "Karakteristik paling penting dari pembelajaran berbasis STEM adalah....", opts: ["A. berorientasi pada hafalan", "B. berpusat pada guru", "C. pemecahan masalah nyata melalui integrasi berbagai disiplin ilmu", "D. menggunakan laboratorium setiap pertemuan", "E. selalu menggunakan robot"], ans: 2 },
+    { n: 3, q: "Dalam engineering design process, setelah masalah berhasil diidentifikasi, langkah yang paling tepat adalah....", opts: ["A. langsung membuat produk akhir", "B. menghafalkan teori", "C. mengembangkan dan mempertimbangkan berbagai solusi", "D. memberikan nilai", "E. melakukan refleksi akhir"], ans: 2 },
+    { n: 4, q: "Seorang guru meminta siswa merancang alat sederhana untuk mengurangi penggunaan energi listrik di kelas. Aktivitas tersebut paling mencerminkan....", opts: ["A. pembelajaran hafalan", "B. STEM", "C. drill", "D. ceramah", "E. remedial"], ans: 1 },
+    { n: 5, q: "Salah satu ciri pembelajaran mendalam adalah....", opts: ["A. siswa menyelesaikan sebanyak mungkin soal", "B. siswa menghafalkan materi", "C. siswa memahami konsep secara bermakna dan mampu mengaplikasikannya", "D. guru menjadi satu-satunya sumber informasi", "E. pembelajaran selalu menggunakan AI"], ans: 2 },
+    { n: 6, q: "Dalam konteks pembelajaran mendalam, berkesadaran paling dekat dengan kemampuan siswa untuk....", opts: ["A. belajar tanpa bantuan guru", "B. menyadari proses dan tujuan belajarnya", "C. menghafalkan materi dengan cepat", "D. menggunakan perangkat digital", "E. menyelesaikan tugas lebih banyak"], ans: 1 },
+    { n: 7, q: "Pembelajaran bermakna terjadi ketika....", opts: ["A. materi sebanyak mungkin diberikan", "B. siswa menghubungkan pengetahuan baru dengan pengalaman atau konteks yang relevan", "C. guru memberikan banyak pekerjaan rumah", "D. siswa menghafalkan definisi", "E. siswa menggunakan internet"], ans: 1 },
+    { n: 8, q: "Pembelajaran yang menggembirakan terutama ditandai oleh....", opts: ["A. tidak adanya evaluasi", "B. siswa bebas melakukan apa saja", "C. suasana belajar positif, aman, menantang, dan melibatkan siswa", "D. materi dibuat sangat mudah", "E. guru tidak memberikan aturan"], ans: 2 },
+    { n: 9, q: "Kemampuan siswa memonitor dan mengevaluasi cara berpikirnya sendiri disebut....", opts: ["A. literasi", "B. metakognisi", "C. numerasi", "D. digitalisasi", "E. otomatisasi"], ans: 1 },
+    { n: 10, q: "Seorang guru meminta siswa menjelaskan mengapa strategi penyelesaian masalah mereka gagal kemudian memperbaikinya. Aktivitas tersebut terutama melatih....", opts: ["A. hafalan", "B. metakognisi", "C. kecepatan membaca", "D. literasi finansial", "E. imitasi"], ans: 1 },
+    { n: 11, q: "Artificial Intelligence secara umum dapat dipahami sebagai....", opts: ["A. teknologi yang hanya digunakan untuk robot", "B. sistem komputer yang mampu melakukan tugas yang biasanya membutuhkan kecerdasan manusia", "C. internet berkecepatan tinggi", "D. perangkat keras komputer", "E. aplikasi pengolah kata"], ans: 1 },
+    { n: 12, q: "Generative AI memiliki kemampuan utama untuk....", opts: ["A. hanya menyimpan data", "B. menghasilkan konten baru berdasarkan pola yang dipelajari", "C. memperbaiki jaringan internet", "D. mengganti sistem operasi", "E. menghapus seluruh data"], ans: 1 },
+    { n: 13, q: "Contoh penggunaan AI yang paling tepat dalam pembelajaran adalah....", opts: ["A. siswa menyerahkan seluruh pekerjaan kepada AI", "B. guru menggunakan AI sebagai alat bantu untuk menghasilkan alternatif aktivitas pembelajaran kemudian memvalidasinya", "C. AI menggantikan guru", "D. siswa menyalin jawaban AI", "E. semua keputusan pembelajaran diberikan kepada AI"], ans: 1 },
+    { n: 14, q: "Salah satu risiko penggunaan Generative AI adalah hallucination, yaitu....", opts: ["A. komputer mengalami kerusakan", "B. AI menghasilkan informasi yang tampak meyakinkan tetapi sebenarnya keliru", "C. internet menjadi lambat", "D. AI tidak dapat menghasilkan teks", "E. komputer kehilangan koneksi"], ans: 1 },
+    { n: 15, q: "Ketika memperoleh jawaban dari AI, langkah paling penting bagi guru adalah....", opts: ["A. langsung mempercayainya", "B. mempublikasikannya", "C. melakukan verifikasi terhadap informasi tersebut", "D. menghapus sumber aslinya", "E. meminta siswa menyalinnya"], ans: 2 },
+    { n: 16, q: "Prompt yang baik umumnya....", opts: ["A. sangat singkat tanpa konteks", "B. memberikan konteks, tujuan, instruksi, dan format keluaran yang diinginkan", "C. hanya berisi satu kata", "D. menggunakan bahasa teknis sebanyak mungkin", "E. tidak perlu menyebutkan target pengguna"], ans: 1 },
+    { n: 17, q: "Penggunaan AI secara etis dalam pembelajaran perlu memperhatikan....", opts: ["A. privasi, akurasi, bias, dan transparansi", "B. kecepatan saja", "C. jumlah aplikasi", "D. warna antarmuka", "E. kapasitas RAM"], ans: 0 },
+    { n: 18, q: "Jika guru memasukkan data pribadi siswa ke layanan AI tanpa mempertimbangkan kebijakan privasi, risiko utamanya adalah....", opts: ["A. data menjadi lebih akurat", "B. pelanggaran privasi dan keamanan data", "C. proses belajar lebih cepat", "D. AI menjadi lebih pintar", "E. komputer menjadi lambat"], ans: 1 },
+    { n: 19, q: "Guru menggunakan simulasi digital untuk mengajarkan medan listrik. Agar pembelajaran tidak berhenti pada penggunaan teknologi, langkah terbaik adalah....", opts: ["A. siswa hanya melihat simulasi", "B. siswa mengubah variabel, mengamati pola, membuat prediksi, kemudian menjelaskan konsep", "C. guru menjalankan simulasi sementara siswa mencatat", "D. siswa menghafalkan hasil simulasi", "E. siswa mengambil screenshot"], ans: 1 },
+    { n: 20, q: "Teknologi dalam pembelajaran sebaiknya....", opts: ["A. menjadi tujuan utama", "B. digunakan sebanyak mungkin", "C. dipilih karena mampu membantu mencapai tujuan pembelajaran", "D. selalu menggantikan eksperimen nyata", "E. digunakan agar pembelajaran terlihat modern"], ans: 2 },
+    { n: 21, q: "Seorang guru menggunakan Arduino untuk mengukur suhu. Agar aktivitas tersebut menjadi STEM yang kuat, siswa sebaiknya....", opts: ["A. hanya merakit Arduino", "B. hanya mengikuti instruksi guru", "C. merancang solusi berdasarkan masalah, mengumpulkan data, menganalisis, menguji, dan memperbaiki desain", "D. menghafalkan nama komponen", "E. menyalin kode"], ans: 2 },
+    { n: 22, q: "Dalam pembelajaran berbasis masalah, guru terutama berperan sebagai....", opts: ["A. satu-satunya sumber jawaban", "B. fasilitator yang membantu siswa membangun solusi", "C. penguji", "D. pemberi hukuman", "E. operator komputer"], ans: 1 },
+    { n: 23, q: "Produk STEM yang baik seharusnya....", opts: ["A. mahal", "B. kompleks", "C. menyelesaikan masalah yang jelas dan dapat diuji", "D. menggunakan banyak komponen", "E. selalu berbasis AI"], ans: 2 },
+    { n: 24, q: "Prototipe gagal ketika diuji. Sikap yang paling sesuai dengan STEM adalah....", opts: ["A. menganggap pembelajaran gagal", "B. menyalahkan siswa", "C. menganalisis penyebab, memperbaiki desain, lalu menguji kembali", "D. langsung mengganti produk", "E. menghentikan proyek"], ans: 2 },
+    { n: 25, q: "Indikator keberhasilan inovasi alat bantu pembelajaran yang paling kuat adalah....", opts: ["A. desainnya terlihat modern", "B. menggunakan banyak teknologi", "C. memberikan dampak terukur terhadap proses atau hasil belajar", "D. biaya pembuatannya mahal", "E. menggunakan AI"], ans: 2 },
+    { n: 26, q: "Perhatikan kode berikut:\n\nx = 10\ny = 5\nprint(x + y)\n\nOutputnya adalah....", opts: ["A. 2", "B. 5", "C. 10", "D. 15", "E. 50"], ans: 3, code: true },
+    { n: 27, q: "Perhatikan kode berikut:\n\nx = 8\ny = 3\nprint(x * y)\n\nHasilnya....", opts: ["A. 11", "B. 24", "C. 5", "D. 83", "E. 2"], ans: 1, code: true },
+    { n: 28, q: "Perhatikan kode berikut:\n\nnilai = 80\nif nilai >= 75:\n    print(\"Lulus\")\nelse:\n    print(\"Tidak Lulus\")\n\nOutputnya....", opts: ["A. Tidak Lulus", "B. Lulus", "C. 75", "D. 80", "E. Error"], ans: 1, code: true },
+    { n: 29, q: "Perhatikan kode berikut:\n\nfor i in range(1, 4):\n    print(i)\n\nOutputnya adalah....", opts: ["A. 0 1 2", "B. 1 2 3", "C. 1 2 3 4", "D. 0 1 2 3", "E. 4"], ans: 1, code: true },
+    { n: 30, q: "Variabel digunakan untuk....", opts: ["A. menyimpan data", "B. mencetak komputer", "C. menghubungkan internet", "D. menghapus program", "E. menjalankan listrik"], ans: 0 },
+    { n: 31, q: "Operator > berarti....", opts: ["A. sama dengan", "B. lebih kecil", "C. lebih besar", "D. tidak sama", "E. assignment"], ans: 2 },
+    { n: 32, q: "Operator == biasanya digunakan untuk....", opts: ["A. memberikan nilai", "B. membandingkan kesamaan", "C. menjumlahkan", "D. mengalikan", "E. menghapus variabel"], ans: 1 },
+    { n: 33, q: "Algoritma adalah....", opts: ["A. perangkat keras", "B. langkah-langkah sistematis untuk menyelesaikan masalah", "C. bahasa pemrograman", "D. aplikasi", "E. jaringan komputer"], ans: 1 },
+    { n: 34, q: "Dalam computational thinking, memecah masalah besar menjadi bagian-bagian kecil disebut....", opts: ["A. abstraction", "B. decomposition", "C. iteration", "D. debugging", "E. simulation"], ans: 1 },
+    { n: 35, q: "Menemukan pola yang sama dari beberapa permasalahan disebut....", opts: ["A. pattern recognition", "B. decomposition", "C. coding", "D. compiling", "E. looping"], ans: 0 },
+    { n: 36, q: "Mengabaikan detail yang tidak diperlukan dan fokus pada informasi penting disebut....", opts: ["A. iteration", "B. abstraction", "C. debugging", "D. decomposition", "E. testing"], ans: 1 },
+    { n: 37, q: "Proses menemukan dan memperbaiki kesalahan dalam program disebut....", opts: ["A. compiling", "B. debugging", "C. looping", "D. rendering", "E. uploading"], ans: 1 },
+    { n: 38, q: "Jika sebuah program menjalankan perintah yang sama berulang kali, struktur yang tepat adalah....", opts: ["A. conditional", "B. loop", "C. variable", "D. input", "E. output"], ans: 1 },
+    { n: 39, q: "Dalam konsep IPO, IPO berarti....", opts: ["A. Input–Process–Output", "B. Internet–Program–Online", "C. Input–Program–Operator", "D. Instruction–Process–Object", "E. Internet–Process–Output"], ans: 0 },
+    { n: 40, q: "Perhatikan kode berikut:\n\na = 4\nb = 2\nc = a + b * 3\nprint(c)\n\nHasilnya....", opts: ["A. 18", "B. 10", "C. 14", "D. 12", "E. 24"], ans: 1, code: true },
+    { n: 41, q: "Mengapa b * 3 dikerjakan sebelum a + ...?", opts: ["A. aturan nama variabel", "B. prioritas operator", "C. karena Python acak", "D. karena variabel b lebih kecil", "E. karena perkalian selalu terakhir"], ans: 1 },
+    { n: 42, q: "Jika siswa membuat flowchart sebelum menulis program, manfaat utamanya adalah....", opts: ["A. memperindah program", "B. membantu merancang logika penyelesaian masalah", "C. mempercepat internet", "D. mengurangi RAM", "E. mengganti bahasa pemrograman"], ans: 1 },
+    { n: 43, q: "Struktur if-else digunakan ketika program perlu....", opts: ["A. mengulang perintah", "B. mengambil keputusan berdasarkan kondisi", "C. menyimpan data", "D. membuat gambar", "E. menghitung waktu"], ans: 1 },
+    { n: 44, q: "Pernyataan yang paling tepat tentang coding dalam pembelajaran adalah....", opts: ["A. coding hanya untuk guru Informatika", "B. coding dapat menjadi alat untuk menyelesaikan masalah lintas disiplin", "C. coding hanya untuk siswa yang pintar matematika", "D. coding harus selalu menggunakan Python", "E. coding tidak berhubungan dengan STEM"], ans: 1 },
+    { n: 45, q: "Guru Fisika ingin siswa membuat program untuk menghitung energi kinetik. Rumusnya: Ek = 1/2 * m * v^2. Variabel yang diperlukan minimal adalah....", opts: ["A. massa dan waktu", "B. massa dan kecepatan", "C. gaya dan jarak", "D. tegangan dan arus", "E. suhu dan massa"], ans: 1 },
+    { n: 46, q: "Sebuah kelompok ingin membuat alat yang dapat memantau suhu ruang kelas secara otomatis. Komponen STEM yang paling jelas adalah....", opts: ["A. Science, Technology, Engineering, Mathematics", "B. Science saja", "C. Technology saja", "D. Mathematics saja", "E. Engineering saja"], ans: 0 },
+    { n: 47, q: "Sensor digunakan untuk....", opts: ["A. menghasilkan keputusan manusia", "B. mendeteksi atau mengukur besaran tertentu", "C. menggantikan komputer", "D. menyimpan semua data", "E. membuat internet"], ans: 1 },
+    { n: 48, q: "Arduino dalam proyek pembelajaran dapat berfungsi sebagai....", opts: ["A. platform mikrokontroler untuk mengendalikan dan membaca perangkat elektronik", "B. mesin pencari", "C. AI generatif", "D. database online", "E. sistem operasi"], ans: 0 },
+    { n: 49, q: "Data sensor yang dikumpulkan secara berkala dapat dimanfaatkan untuk....", opts: ["A. analisis pola", "B. hanya dicetak", "C. mengganti sensor", "D. menghapus data", "E. memperlambat sistem"], ans: 0 },
+    { n: 50, q: "Jika siswa menggunakan AI untuk menghasilkan hipotesis, langkah berikutnya yang paling tepat adalah....", opts: ["A. menerima hipotesis sebagai fakta", "B. menguji hipotesis melalui bukti/eksperimen", "C. menghapus hipotesis", "D. meminta AI memberikan nilai", "E. menghafalkan jawaban"], ans: 1 },
+    { n: 51, q: "Dalam pembelajaran mendalam, teknologi paling ideal berfungsi sebagai....", opts: ["A. pusat pembelajaran", "B. alat untuk memperkuat pengalaman memahami, mengaplikasi, dan merefleksi", "C. pengganti guru", "D. pengganti interaksi siswa", "E. sumber jawaban tunggal"], ans: 1 },
+    { n: 52, q: "Contoh aktivitas yang paling menunjukkan transfer pengetahuan adalah....", opts: ["A. siswa menghafalkan rumus", "B. siswa menggunakan konsep energi untuk menganalisis konsumsi listrik rumah", "C. siswa menyalin definisi", "D. siswa membaca buku", "E. siswa mengerjakan soal yang identik"], ans: 1 },
+    { n: 53, q: "Jika siswa mampu menjelaskan alasan suatu solusi lebih baik dibanding solusi lain berdasarkan data, kemampuan yang terlihat adalah....", opts: ["A. reasoning", "B. hafalan", "C. imitasi", "D. literasi dasar", "E. reproduksi"], ans: 0 },
+    { n: 54, q: "Dalam proyek STEM, data hasil pengukuran sebaiknya....", opts: ["A. diabaikan", "B. digunakan untuk mengambil keputusan dan memperbaiki desain", "C. dihapus setelah digunakan", "D. diganti dengan perkiraan", "E. selalu dibuat sempurna"], ans: 1 },
+    { n: 55, q: "Salah satu indikator proyek benar-benar bermakna adalah....", opts: ["A. siswa dapat menjelaskan hubungan proyek dengan kehidupan nyata", "B. alat terlihat mahal", "C. proyek membutuhkan banyak komponen", "D. siswa menggunakan AI", "E. presentasi sangat panjang"], ans: 0 },
+    { n: 56, q: "AI paling tepat digunakan sebagai co-pilot guru, artinya....", opts: ["A. menggantikan guru", "B. membantu guru dalam pekerjaan tertentu tetapi keputusan pedagogis tetap dikendalikan manusia", "C. menentukan nilai siswa secara otomatis", "D. menentukan kurikulum", "E. mengajar tanpa pengawasan"], ans: 1 },
+    { n: 57, q: "Jika AI memberikan informasi tentang konsep Fisika yang meragukan, guru harus....", opts: ["A. langsung menggunakannya", "B. melakukan verifikasi menggunakan sumber terpercaya", "C. menghapus semua AI", "D. menyalahkan siswa", "E. meminta AI mengulang jawaban tanpa verifikasi"], ans: 1 },
+    { n: 58, q: "Dalam sebuah proyek, siswa membuat alat tetapi tidak pernah menguji apakah alat tersebut efektif meningkatkan pembelajaran. Kekurangan utama proyek tersebut adalah....", opts: ["A. tidak ada validasi/evaluasi dampak", "B. terlalu banyak matematika", "C. terlalu sedikit teknologi", "D. tidak menggunakan AI", "E. tidak menggunakan internet"], ans: 0 },
+    { n: 59, q: "Proses memperbaiki desain berdasarkan hasil pengujian merupakan contoh....", opts: ["A. iteration", "B. memorization", "C. abstraction", "D. imitation", "E. translation"], ans: 0 },
+    { n: 60, q: "Kombinasi paling kuat untuk proyek TTC adalah....", opts: ["A. alat canggih + presentasi menarik", "B. masalah nyata + STEM + teknologi tepat guna + data + refleksi + dampak pembelajaran", "C. AI + robot + internet", "D. aplikasi + animasi", "E. sensor sebanyak mungkin"], ans: 1 },
+    { n: 61, q: "Phishing adalah....", opts: ["A. teknik meningkatkan kecepatan internet", "B. upaya menipu pengguna untuk memperoleh informasi sensitif", "C. metode membuat website", "D. sistem backup", "E. algoritma AI"], ans: 1 },
+    { n: 62, q: "Password yang baik sebaiknya....", opts: ["A. sama untuk semua akun", "B. menggunakan nama dan tanggal lahir", "C. unik dan sulit ditebak", "D. dibagikan kepada teman", "E. menggunakan \"123456\""], ans: 2 },
+    { n: 63, q: "Jejak digital adalah....", opts: ["A. sidik jari", "B. rekam aktivitas seseorang di lingkungan digital", "C. alamat rumah", "D. nomor komputer", "E. kode program"], ans: 1 },
+    { n: 64, q: "Saat menggunakan gambar dari internet untuk bahan ajar, guru perlu memperhatikan....", opts: ["A. hak cipta dan lisensi", "B. ukuran gambar saja", "C. warna gambar", "D. resolusi monitor", "E. jumlah gambar"], ans: 0 },
+    { n: 65, q: "Informasi yang dihasilkan AI sebaiknya dianggap....", opts: ["A. selalu benar", "B. selalu salah", "C. perlu diverifikasi", "D. tidak boleh digunakan", "E. sama dengan sumber primer"], ans: 2 },
+    { n: 66, q: "Salah satu prinsip keamanan data adalah....", opts: ["A. mengumpulkan data sebanyak mungkin", "B. membagikan data pribadi secara bebas", "C. hanya menggunakan data yang diperlukan dan menjaganya", "D. menggunakan password yang sama", "E. menyimpan data tanpa perlindungan"], ans: 2 },
+    { n: 67, q: "Contoh data pribadi adalah....", opts: ["A. warna papan tulis", "B. nomor identitas seseorang", "C. konsep gravitasi", "D. rumus matematika", "E. definisi energi"], ans: 1 },
+    { n: 68, q: "Saat menerima tautan mencurigakan melalui email, tindakan paling aman adalah....", opts: ["A. langsung klik", "B. meneruskannya", "C. memeriksa sumber dan alamat tautan terlebih dahulu", "D. memasukkan password", "E. mengunduh semua lampiran"], ans: 2 },
+    { n: 69, q: "Literasi digital tidak hanya berarti mampu menggunakan teknologi, tetapi juga....", opts: ["A. mampu menggunakan teknologi secara kritis, aman, etis, dan bertanggung jawab", "B. mampu membeli perangkat", "C. memiliki banyak aplikasi", "D. menggunakan media sosial setiap hari", "E. mampu bermain game"], ans: 0 },
+    { n: 70, q: "Dalam pembelajaran berbasis AI, guru tetap penting karena....", opts: ["A. AI tidak membutuhkan manusia", "B. guru memiliki pertimbangan pedagogis, etis, kontekstual, dan manusiawi", "C. AI tidak bisa menghasilkan teks", "D. guru hanya mengoperasikan komputer", "E. AI tidak dapat menghitung"], ans: 1 },
+    { n: 71, q: "Guru ingin membuat alat pemantau kualitas udara kelas. Agar proyek memenuhi prinsip STEM, langkah pertama yang paling tepat adalah....", opts: ["A. membeli sensor", "B. menentukan masalah dan kebutuhan yang ingin diselesaikan", "C. membuat aplikasi", "D. membeli Arduino", "E. membuat poster"], ans: 1 },
+    { n: 72, q: "Siswa membuat alat tetapi ternyata biaya terlalu mahal. Dalam engineering design process, tindakan terbaik adalah....", opts: ["A. menghentikan proyek", "B. mencari alternatif desain yang tetap memenuhi fungsi dengan biaya lebih efisien", "C. meminta sekolah menambah dana", "D. mengurangi fungsi tanpa analisis", "E. mengganti masalah"], ans: 1 },
+    { n: 73, q: "Sebuah alat memiliki akurasi tinggi tetapi siswa tidak memahami konsep yang mendasarinya. Kesimpulan paling tepat adalah....", opts: ["A. proyek pasti berhasil", "B. keberhasilan teknologi belum tentu berarti keberhasilan pembelajaran", "C. alat harus lebih mahal", "D. siswa tidak perlu memahami konsep", "E. AI harus ditambahkan"], ans: 1 },
+    { n: 74, q: "Guru membuat chatbot AI untuk membantu siswa belajar Fisika. Agar mendukung pembelajaran mendalam, chatbot sebaiknya....", opts: ["A. langsung memberikan semua jawaban", "B. memberikan pertanyaan pemantik, umpan balik, dan membantu siswa membangun penalaran", "C. mengerjakan semua soal", "D. menggantikan guru", "E. hanya memberikan definisi"], ans: 1 },
+    { n: 75, q: "Siswa bertanya kepada AI: \"Berikan jawaban soal ini.\" Strategi prompt yang lebih mendukung pembelajaran adalah....", opts: ["A. \"Jawab saja.\"", "B. \"Berikan jawaban akhir.\"", "C. \"Bantu saya memahami langkah penyelesaian tanpa langsung memberikan jawaban akhir.\"", "D. \"Kerjakan semuanya.\"", "E. \"Berikan nilai.\""], ans: 2 },
+    { n: 76, q: "Jika tujuan pembelajaran adalah kemampuan berpikir kritis, penggunaan AI yang paling tepat adalah....", opts: ["A. siswa menyalin jawaban", "B. siswa membandingkan jawaban AI dengan sumber lain dan mengidentifikasi kesalahan", "C. AI mengerjakan tes", "D. AI menentukan nilai", "E. siswa tidak boleh bertanya"], ans: 1 },
+    { n: 77, q: "Sebuah kelompok membuat smart classroom tetapi tidak memiliki indikator keberhasilan. Kelemahan utamanya adalah....", opts: ["A. tidak ada teknologi", "B. tidak ada ukuran dampak yang jelas", "C. terlalu banyak siswa", "D. terlalu banyak data", "E. tidak ada AI"], ans: 1 },
+    { n: 78, q: "Untuk membuktikan inovasi meningkatkan pembelajaran, data yang paling relevan adalah....", opts: ["A. harga alat", "B. jumlah kabel", "C. perubahan indikator belajar sebelum dan sesudah implementasi", "D. warna alat", "E. ukuran alat"], ans: 2 },
+    { n: 79, q: "Guru ingin mengajarkan listrik dinamis dengan Arduino. Aktivitas paling mendalam adalah....", opts: ["A. siswa menyalin rangkaian", "B. siswa mengukur tegangan dan arus, menganalisis hubungan, membuat prediksi, kemudian menguji prediksi", "C. siswa menghafalkan hukum Ohm", "D. guru mendemonstrasikan", "E. siswa melihat video"], ans: 1 },
+    { n: 80, q: "Jika data eksperimen tidak sesuai teori, tindakan ilmiah yang paling tepat adalah....", opts: ["A. menghapus data", "B. mengganti data", "C. menganalisis kemungkinan penyebab dan melakukan pengujian ulang", "D. menyalahkan sensor", "E. mengikuti teori tanpa memeriksa data"], ans: 2 },
+    { n: 81, q: "Sebuah AI memberikan hasil yang bias karena data pelatihannya tidak representatif. Masalah tersebut berkaitan dengan....", opts: ["A. AI bias", "B. RAM", "C. bandwidth", "D. resolusi", "E. debugging"], ans: 0 },
+    { n: 82, q: "Guru ingin menggunakan AI untuk memberikan rekomendasi pembelajaran individual. Hal yang paling penting diperhatikan adalah....", opts: ["A. rekomendasi harus diterima tanpa pemeriksaan", "B. rekomendasi perlu divalidasi guru dan memperhatikan kondisi nyata siswa", "C. data siswa boleh dibagikan", "D. AI harus menentukan semua keputusan", "E. guru tidak perlu mengetahui prosesnya"], ans: 1 },
+    { n: 83, q: "Dalam proyek sensor energi listrik, siswa hanya mengikuti tutorial YouTube langkah demi langkah. Agar lebih mendalam, guru sebaiknya....", opts: ["A. menambah tutorial", "B. memberikan masalah terbuka yang menuntut siswa merancang solusi sendiri", "C. memberikan jawaban", "D. mengurangi proyek", "E. meminta siswa menghafal kode"], ans: 1 },
+    { n: 84, q: "Dalam pembelajaran STEM, kegagalan prototipe sebaiknya dipandang sebagai....", opts: ["A. kesalahan yang harus dihindari", "B. sumber informasi untuk iterasi dan perbaikan", "C. alasan memberikan nilai nol", "D. bukti siswa tidak mampu", "E. kegagalan pembelajaran"], ans: 1 },
+    { n: 85, q: "Siswa mampu membuat alat tetapi tidak dapat menjelaskan prinsip ilmiahnya. Guru perlu....", opts: ["A. menganggap tujuan tercapai", "B. menghubungkan kembali proses pembuatan alat dengan konsep ilmiah yang mendasarinya", "C. menambah komponen", "D. menggunakan AI", "E. mengurangi teori"], ans: 1 },
+    { n: 86, q: "Manakah pernyataan yang paling tepat?", opts: ["A. STEM = menggunakan teknologi dalam pembelajaran", "B. STEM = mengintegrasikan berbagai disiplin untuk memecahkan masalah", "C. STEM = pembelajaran Informatika", "D. STEM = pembelajaran berbasis komputer", "E. STEM = eksperimen laboratorium"], ans: 1 },
+    { n: 87, q: "AI dalam pembelajaran sebaiknya....", opts: ["A. menggantikan guru", "B. digunakan secara kritis dan bertanggung jawab sebagai alat bantu", "C. selalu digunakan", "D. digunakan tanpa verifikasi", "E. digunakan untuk semua tugas siswa"], ans: 1 },
+    { n: 88, q: "Pembelajaran mendalam bukan berarti....", opts: ["A. belajar lebih bermakna", "B. memahami konsep secara mendalam", "C. melakukan refleksi", "D. memberikan materi sebanyak-banyaknya", "E. mengaplikasikan pengetahuan"], ans: 3 },
+    { n: 89, q: "Prototipe terbaik bukan selalu prototipe yang....", opts: ["A. paling mahal", "B. paling relevan dengan masalah", "C. dapat diuji", "D. memiliki dampak", "E. dapat diperbaiki"], ans: 0 },
+    { n: 90, q: "Coding terutama melatih....", opts: ["A. hafalan", "B. computational thinking dan pemecahan masalah", "C. kemampuan mengetik", "D. penggunaan media sosial", "E. kemampuan menggambar"], ans: 1 },
+    { n: 91, q: "Dalam proyek STEM, pertanyaan \"Bagaimana kita dapat....?\" biasanya digunakan untuk....", opts: ["A. merumuskan tantangan/problem", "B. memberikan jawaban", "C. memberikan nilai", "D. mengakhiri proyek", "E. membuat laporan"], ans: 0 },
+    { n: 92, q: "Jika alat berhasil secara teknis tetapi tidak meningkatkan pembelajaran, maka....", opts: ["A. alat tetap dianggap berhasil sepenuhnya", "B. perlu dilakukan evaluasi terhadap desain pembelajarannya", "C. siswa harus disalahkan", "D. AI harus ditambahkan", "E. alat harus dibuat lebih mahal"], ans: 1 },
+    { n: 93, q: "Salah satu indikator inovasi yang kuat adalah....", opts: ["A. kebaruan saja", "B. relevansi, kebermanfaatan, keterujian, dan dampak", "C. kompleksitas", "D. harga", "E. jumlah komponen"], ans: 1 },
+    { n: 94, q: "Siswa yang mampu menemukan kesalahan dalam jawaban AI sedang melatih....", opts: ["A. critical thinking", "B. memorization", "C. typing", "D. imitation", "E. copying"], ans: 0 },
+    { n: 95, q: "Guru meminta AI membuat soal Fisika. Setelah soal dibuat, guru sebaiknya....", opts: ["A. langsung menggunakannya", "B. memeriksa kesesuaian konsep, tingkat kesulitan, bahasa, dan kebenaran jawaban", "C. meminta siswa memeriksa semuanya", "D. tidak perlu mengecek", "E. mencetak semua soal"], ans: 1 },
+    { n: 96, q: "Dalam pembelajaran berbasis proyek, asesmen sebaiknya....", opts: ["A. hanya dilakukan pada akhir", "B. mencakup proses dan produk", "C. hanya menilai produk", "D. hanya menilai presentasi", "E. hanya menilai laporan"], ans: 1 },
+    { n: 97, q: "Jika dua solusi sama-sama dapat menyelesaikan masalah, siswa sebaiknya....", opts: ["A. memilih secara acak", "B. membandingkan berdasarkan kriteria dan bukti", "C. memilih yang paling mahal", "D. memilih yang paling rumit", "E. mengikuti guru"], ans: 1 },
+    { n: 98, q: "Penggunaan data dalam proyek STEM penting karena....", opts: ["A. membuat proyek terlihat ilmiah", "B. membantu mengambil keputusan berdasarkan bukti", "C. memperpanjang laporan", "D. menambah jumlah tabel", "E. membuat presentasi menarik"], ans: 1 },
+    { n: 99, q: "Inovasi pembelajaran yang baik seharusnya....", opts: ["A. hanya dapat digunakan oleh pembuatnya", "B. memiliki peluang untuk diterapkan dan direplikasi dalam konteks yang relevan", "C. selalu menggunakan teknologi terbaru", "D. membutuhkan biaya tinggi", "E. sangat kompleks"], ans: 1 },
+    { n: 100, q: "Jika harus memilih satu prinsip paling penting dalam merancang inovasi TTC, pilihan terbaik adalah....", opts: ["A. teknologi harus canggih", "B. AI harus digunakan", "C. inovasi harus menjawab masalah nyata dan menghasilkan dampak pembelajaran yang dapat dibuktikan", "D. alat harus mahal", "E. produk harus terlihat futuristik"], ans: 2 }
+];
+
+// Data Soal Pilihan Ganda Kompleks Paket B
+const complexData = [
+    { n: 1, q: "Pernyataan yang sesuai dengan pembelajaran berbasis STEM adalah....", opts: ["A. Mengintegrasikan beberapa disiplin ilmu", "B. Berorientasi pada pemecahan masalah", "C. Selalu harus menggunakan komputer", "D. Menghasilkan atau menguji solusi", "E. Menghubungkan pembelajaran dengan masalah nyata"], ans: [0, 1, 3, 4] },
+    { n: 2, q: "Yang termasuk karakteristik pembelajaran mendalam adalah....", opts: ["A. Berkesadaran", "B. Bermakna", "C. Menggembirakan", "D. Mengutamakan hafalan", "E. Mendorong refleksi"], ans: [0, 1, 2, 4] },
+    { n: 3, q: "Penggunaan AI yang tepat oleh guru antara lain....", opts: ["A. Membantu menghasilkan ide pembelajaran", "B. Membuat variasi soal", "C. Menggantikan seluruh peran guru", "D. Membantu membuat rubrik", "E. Membantu memberikan alternatif aktivitas pembelajaran"], ans: [0, 1, 3, 4] },
+    { n: 4, q: "Risiko yang perlu diperhatikan ketika menggunakan Generative AI adalah....", opts: ["A. Hallucination", "B. Bias", "C. Pelanggaran privasi", "D. Informasi yang tidak terverifikasi", "E. AI selalu menghasilkan jawaban salah"], ans: [0, 1, 2, 3] },
+    { n: 5, q: "Komponen computational thinking meliputi....", opts: ["A. Decomposition", "B. Pattern recognition", "C. Abstraction", "D. Algorithmic thinking", "E. Menghafal sintaks"], ans: [0, 1, 2, 3] },
+    { n: 6, q: "Dalam proses merancang prototipe, kegiatan yang tepat adalah....", opts: ["A. Mengidentifikasi masalah", "B. Mengembangkan beberapa solusi", "C. Membuat prototipe", "D. Menguji prototipe", "E. Menghindari kegagalan"], ans: [0, 1, 2, 3] },
+    { n: 7, q: "Sebuah kelompok siswa membuat alat pemantau suhu kelas. Aktivitas yang menunjukkan pembelajaran STEM adalah....", opts: ["A. Memilih sensor berdasarkan kebutuhan", "B. Mengukur suhu", "C. Menganalisis data", "D. Memperbaiki desain berdasarkan hasil pengujian", "E. Hanya menyalin tutorial"], ans: [0, 1, 2, 3] },
+    { n: 8, q: "Guru ingin pembelajaran Fisika lebih mendalam. Strategi yang tepat adalah....", opts: ["A. Menghubungkan konsep dengan fenomena kehidupan nyata", "B. Meminta siswa menjelaskan alasan jawabannya", "C. Memberikan kesempatan refleksi", "D. Memperbanyak hafalan rumus", "E. Memberikan masalah kontekstual"], ans: [0, 1, 2, 4] },
+    { n: 9, q: "Untuk mengetahui keberhasilan inovasi pembelajaran, data yang dapat digunakan adalah....", opts: ["A. Hasil belajar sebelum dan sesudah penggunaan inovasi", "B. Respons siswa", "C. Hasil observasi aktivitas belajar", "D. Data penggunaan alat", "E. Warna prototipe"], ans: [0, 1, 2, 3] },
+    { n: 10, q: "Dalam menggunakan AI untuk pembelajaran, guru perlu memperhatikan....", opts: ["A. Privasi data", "B. Verifikasi informasi", "C. Hak cipta", "D. Bias algoritma", "E. Mengikuti semua jawaban AI"], ans: [0, 1, 2, 3] },
+    { n: 11, q: "Guru Fisika ingin mengajarkan konsep energi listrik melalui proyek smart energy monitoring. Agar proyek tersebut mendukung STEM dan pembelajaran mendalam, kegiatan yang tepat adalah....", opts: ["A. Siswa mengukur konsumsi energi", "B. Siswa menganalisis pola penggunaan energi", "C. Siswa merancang solusi penghematan", "D. Siswa menguji efektivitas solusi", "E. Guru memberikan desain alat yang harus ditiru persis"], ans: [0, 1, 2, 3] },
+    { n: 12, q: "Sebuah kelompok membuat aplikasi AI untuk membantu siswa memahami Hukum Newton. Agar AI berfungsi sebagai learning assistant, aplikasi sebaiknya....", opts: ["A. Memberikan pertanyaan pemantik", "B. Memberikan umpan balik", "C. Langsung memberikan jawaban akhir setiap saat", "D. Meminta siswa menjelaskan alasan", "E. Membantu siswa melakukan refleksi"], ans: [0, 1, 3, 4] },
+    { n: 13, q: "Dalam proyek STEM, prototipe pertama gagal. Respons guru yang paling tepat adalah....", opts: ["A. Mengajak siswa mencari penyebab kegagalan", "B. Menggunakan data pengujian", "C. Memperbaiki desain", "D. Menguji kembali", "E. Menganggap kegagalan sebagai ketidakmampuan siswa"], ans: [0, 1, 2, 3] },
+    { n: 14, q: "Agar penggunaan AI tidak menyebabkan ketergantungan siswa, guru dapat....", opts: ["A. Meminta siswa menjelaskan proses berpikirnya", "B. Menggunakan AI sebagai pemberi umpan balik", "C. Membandingkan jawaban AI dengan sumber lain", "D. Membiarkan AI mengerjakan seluruh tugas", "E. Meminta siswa memverifikasi jawaban AI"], ans: [0, 1, 2, 4] },
+    { n: 15, q: "Indikator bahwa sebuah inovasi pembelajaran memiliki potensi kuat untuk dikembangkan adalah....", opts: ["A. Memecahkan masalah nyata", "B. Mudah diuji", "C. Memiliki dampak pembelajaran", "D. Dapat dikembangkan lebih lanjut", "E. Menggunakan teknologi paling mahal"], ans: [0, 1, 2, 3] }
+];
+
+// Data Menjodohkan
+const matchGroups = [
+    {
+        title: "C. Menjodohkan - Computatonal Thinking & Dasar",
+        items: [
+            { id: 16, a: "Decomposition", ans: "B" },
+            { id: 17, a: "Pattern Recognition", ans: "A" },
+            { id: 18, a: "Abstraction", ans: "D" },
+            { id: 19, a: "Algorithm", ans: "C" },
+            { id: 20, a: "Debugging", ans: "E" },
+            { id: 21, a: "Iteration", ans: "F" },
+            { id: 22, a: "Sensor", ans: "G" },
+            { id: 23, a: "Prototype", ans: "H" },
+            { id: 24, a: "Generative AI", ans: "I" },
+            { id: 25, a: "Hallucination", ans: "J" }
+        ],
+        options: {
+            "A": "Menemukan pola", "B": "Memecah masalah", "C": "Langkah sistematis", "D": "Fokus pada informasi penting", "E": "Memperbaiki kesalahan program",
+            "F": "Pengulangan/perbaikan desain", "G": "Mendeteksi besaran", "H": "Model awal solusi", "I": "Menghasilkan konten baru", "J": "Informasi AI yang tampak benar tetapi keliru"
+        }
+    },
+    {
+        title: "D. Menjodohkan - STEM",
+        items: [
+            { id: 26, a: "Science", ans: "B" },
+            { id: 27, a: "Technology", ans: "D" },
+            { id: 28, a: "Engineering", ans: "C" },
+            { id: 29, a: "Mathematics", ans: "A" },
+            { id: 30, a: "Problem Identification", ans: "E" },
+            { id: 31, a: "Prototype", ans: "F" },
+            { id: 32, a: "Testing", ans: "G" },
+            { id: 33, a: "Data Analysis", ans: "H" },
+            { id: 34, a: "Iteration", ans: "I" },
+            { id: 35, a: "Reflection", ans: "J" }
+        ],
+        options: {
+            "A": "Menghitung kebutuhan energi", "B": "Menjelaskan prinsip ilmiah", "C": "Merancang solusi", "D": "Menggunakan sensor", "E": "Menentukan masalah",
+            "F": "Membuat model awal", "G": "Menguji kinerja", "H": "Mencari pola dari data", "I": "Memperbaiki desain", "J": "Mengevaluasi pengalaman belajar"
+        }
+    },
+    {
+        title: "E. Menjodohkan - AI",
+        items: [
+            { id: 36, a: "Artificial Intelligence", ans: "C" },
+            { id: 37, a: "Generative AI", ans: "E" },
+            { id: 38, a: "Prompt", ans: "A" },
+            { id: 39, a: "Hallucination", ans: "B" },
+            { id: 40, a: "Bias", ans: "D" },
+            { id: 41, a: "Verification", ans: "F" },
+            { id: 42, a: "AI Literacy", ans: "G" },
+            { id: 43, a: "Privacy", ans: "H" },
+            { id: 44, a: "Human Oversight", ans: "I" },
+            { id: 45, a: "Critical Thinking", ans: "J" }
+        ],
+        options: {
+            "A": "Instruksi kepada AI", "B": "Informasi palsu yang dihasilkan AI", "C": "Sistem yang melakukan tugas yang membutuhkan kecerdasan", "D": "Ketidakadilan akibat data/model", "E": "Menghasilkan konten baru",
+            "F": "Memeriksa kebenaran informasi", "G": "Kemampuan memahami dan menggunakan AI secara kritis", "H": "Perlindungan informasi pribadi", "I": "Pengawasan manusia", "J": "Mengevaluasi informasi secara kritis"
+        }
+    },
+    {
+        title: "F. Menjodohkan - Coding",
+        items: [
+            { id: 46, a: "Variable", ans: "B" },
+            { id: 47, a: "If/Else", ans: "C" },
+            { id: 48, a: "Loop", ans: "A" },
+            { id: 49, a: "Function", ans: "D" },
+            { id: 50, a: "Input", ans: "E" },
+            { id: 51, a: "Output", ans: "F" },
+            { id: 52, a: "Operator", ans: "G" },
+            { id: 53, a: "Debugging", ans: "H" },
+            { id: 54, a: "Algorithm", ans: "I" },
+            { id: 55, a: "Flowchart", ans: "J" }
+        ],
+        options: {
+            "A": "Pengulangan", "B": "Menyimpan data", "C": "Percabangan", "D": "Blok kode yang dapat digunakan kembali", "E": "Data yang masuk",
+            "F": "Hasil program", "G": "Melakukan operasi", "H": "Memperbaiki kesalahan", "I": "Langkah penyelesaian", "J": "Representasi visual algoritma"
+        }
+    },
+    {
+        title: "G. Menjodohkan - Studi Kasus",
+        items: [
+            { id: 56, a: "Siswa hanya menyalin jawaban AI", ans: "A" },
+            { id: 57, a: "Prototipe tidak berfungsi", ans: "B" },
+            { id: 58, a: "Data sensor tidak konsisten", ans: "C" },
+            { id: 59, a: "Siswa tidak memahami konsep", ans: "D" },
+            { id: 60, a: "AI menghasilkan informasi meragukan", ans: "E" },
+            { id: 61, a: "Biaya prototipe terlalu mahal", ans: "F" },
+            { id: 62, a: "Siswa pasif mengikuti tutorial", ans: "G" },
+            { id: 63, a: "Inovasi belum diketahui dampaknya", ans: "H" },
+            { id: 64, a: "Data siswa akan dimasukkan ke AI", ans: "I" },
+            { id: 65, a: "Siswa hanya membuat alat tanpa refleksi", ans: "J" }
+        ],
+        options: {
+            "A": "Verifikasi sumber", "B": "Iterasi", "C": "Periksa sensor dan metode pengukuran", "D": "Hubungkan kembali dengan konsep", "E": "Validasi",
+            "F": "Optimasi desain", "G": "Berikan masalah terbuka", "H": "Buat indikator keberhasilan", "I": "Pertimbangkan privasi", "J": "Tambahkan refleksi"
+        }
+    }
+];
+
+// Render Soal Pilihan Ganda 1-100
+const pgContainer = document.getElementById('pg-container');
+pgData.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    
+    let content = `<div class="question-text">${item.n}. ${item.q.replace(/\n/g, '<br>')}</div>`;
+    
+    content += `<ul class="options">`;
+    item.opts.forEach((opt, idx) => {
+        content += `<li><button class="option-btn" onclick="checkPG(${item.n}, ${idx}, ${item.ans}, this)">${opt}</button></li>`;
+    });
+    content += `</ul>`;
+    content += `<div id="feedback-pg-${item.n}" class="feedback"></div>`;
+    
+    card.innerHTML = content;
+    pgContainer.appendChild(card);
+});
+
+function checkPG(qNum, selectedIdx, correctIdx, btn) {
+    const parent = btn.closest('.options');
+    const buttons = parent.querySelectorAll('.option-btn');
+    const feedback = document.getElementById(`feedback-pg-${qNum}`);
+    
+    buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === correctIdx) {
+            b.classList.add('correct');
+        }
+    });
+
+    if (selectedIdx === correctIdx) {
+        feedback.innerText = "Benar! Jawaban Anda Tepat.";
+        feedback.className = "feedback correct";
+    } else {
+        btn.classList.add('wrong');
+        feedback.innerText = "Salah! Jawaban yang benar adalah " + String.fromCharCode(65 + correctIdx);
+        feedback.className = "feedback wrong";
+    }
+    feedback.style.display = "block";
+}
+
+// Render Pilihan Ganda Kompleks
+const complexContainer = document.getElementById('complex-container');
+complexData.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    
+    let content = `<div class="question-text">P-B${item.n}. ${item.q}</div>`;
+    content += `<form id="complex-form-${item.n}">`;
+    item.opts.forEach((opt, idx) => {
+        content += `<div><label><input type="checkbox" name="complex-${item.n}" value="${idx}"> ${opt}</label></div>`;
+    });
+    content += `<button type="button" class="submit-btn" onclick="checkComplex(${item.n})">Cek Jawaban</button>`;
+    content += `</form>`;
+    content += `<div id="feedback-complex-${item.n}" class="feedback"></div>`;
+    
+    card.innerHTML = content;
+    complexContainer.appendChild(card);
+});
+
+function checkComplex(qNum) {
+    const form = document.getElementById(`complex-form-${qNum}`);
+    const selected = Array.from(form.querySelectorAll(`input[name="complex-${qNum}"]:checked`)).map(cb => parseInt(cb.value));
+    const item = complexData.find(d => d.n === qNum);
+    const feedback = document.getElementById(`feedback-complex-${qNum}`);
+    
+    const correct = item.ans;
+    const isCorrect = selected.length === correct.length && selected.every(val => correct.includes(val));
+    
+    const correctLabels = correct.map(i => String.fromCharCode(65 + i)).join(", ");
+    
+    if (isCorrect) {
+        feedback.innerText = "Benar! Semua opsi pilihan Anda tepat. (" + correctLabels + ")";
+        feedback.className = "feedback correct";
+    } else {
+        feedback.innerText = "Kurang Tepat. Jawaban yang benar adalah opsi: " + correctLabels;
+        feedback.className = "feedback wrong";
+    }
+    feedback.style.display = "block";
+}
+
+// Render Menjodohkan
+const matchContainer = document.getElementById('match-container');
+matchGroups.forEach(group => {
+    const sectionHeader = document.createElement('h3');
+    sectionHeader.innerText = group.title;
+    matchContainer.appendChild(sectionHeader);
+
+    group.items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        
+        let selectOptions = `<option value="">-- Pilih Jodoh Pasangan --</option>`;
+        for (let key in group.options) {
+            selectOptions += `<option value="${key}">${key}. ${group.options[key]}</option>`;
+        }
+
+        let content = `<div class="question-text">${item.id}. ${item.a}</div>`;
+        content += `<label>Pasangan: <select id="match-select-${item.id}">${selectOptions}</select></label>`;
+        content += `<button type="button" class="submit-btn" onclick="checkMatch(${item.id}, '${item.ans}')">Cek</button>`;
+        content += `<div id="feedback-match-${item.id}" class="feedback"></div>`;
+        
+        card.innerHTML = content;
+        matchContainer.appendChild(card);
+    });
+});
+
+function checkMatch(id, correctAns) {
+    const select = document.getElementById(`match-select-${id}`);
+    const selectedVal = select.value;
+    const feedback = document.getElementById(`feedback-match-${id}`);
+
+    if (!selectedVal) {
+        alert("Silakan pilih opsi terlebih dahulu!");
+        return;
+    }
+
+    if (selectedVal === correctAns) {
+        feedback.innerText = "Benar! Pasangannya adalah " + correctAns;
+        feedback.className = "feedback correct";
+    } else {
+        feedback.innerText = "Salah! Pasangan yang benar adalah " + correctAns;
+        feedback.className = "feedback wrong";
+    }
+    feedback.style.display = "block";
+}
+</script>
+
+</body>
+</html>
