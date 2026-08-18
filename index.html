@@ -5,109 +5,207 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulasi Prediksi Tes TTC BCA 2026 Interaktif</title>
     <style>
+        :root {
+            --primary-color: #0056b3;
+            --primary-hover: #003d80;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #cbd5e1;
+            --success-bg: #d1fae5;
+            --success-border: #10b981;
+            --success-text: #065f46;
+            --error-bg: #fee2e2;
+            --error-border: #ef4444;
+            --error-text: #991b1b;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            background-color: #f4f6f9;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 20px;
         }
+
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-        h1, h2, h3 {
-            color: #0056b3;
-            border-bottom: 2px solid #e2e8f0;
+
+        h1 {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
             padding-bottom: 8px;
+            margin-top: 35px;
         }
+
+        h3 {
+            color: #1e293b;
+            background: #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 25px;
+        }
+
         .question-card {
             background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 15px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
+
         .question-text {
-            font-weight: bold;
-            margin-bottom: 12px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            font-size: 15px;
         }
+
         .options {
             list-style: none;
             padding: 0;
             margin: 0;
         }
+
         .options li {
             margin-bottom: 8px;
         }
+
         .option-btn {
             display: block;
             width: 100%;
             text-align: left;
-            padding: 10px 15px;
+            padding: 12px 16px;
             background: #fff;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-btn.correct {
+            background-color: var(--success-bg) !important;
+            border-color: var(--success-border) !important;
+            color: var(--success-text) !important;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--error-bg) !important;
+            border-color: var(--error-border) !important;
+            color: var(--error-text) !important;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #fff;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 14px;
         }
-        .option-btn:hover {
-            background: #e2e8f0;
+
+        .checkbox-label:hover {
+            background: #f1f5f9;
         }
-        .option-btn.correct {
-            background-color: #d1fae5 !important;
-            border-color: #10b981 !important;
-            color: #065f46;
-            font-weight: bold;
+
+        .checkbox-label input[type="checkbox"] {
+            margin-top: 3px;
         }
-        .option-btn.wrong {
-            background-color: #fee2e2 !important;
-            border-color: #ef4444 !important;
-            color: #991b1b;
-        }
+
         .feedback {
-            margin-top: 10px;
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 6px;
             font-weight: bold;
             display: none;
+            font-size: 14px;
         }
+
         .feedback.correct {
-            color: #059669;
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid var(--success-border);
         }
+
         .feedback.wrong {
-            color: #dc2626;
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid var(--error-border);
         }
+
         .code-block {
             background: #1e293b;
             color: #f8fafc;
-            padding: 10px 15px;
-            border-radius: 4px;
-            font-family: monospace;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
             white-space: pre-wrap;
             margin: 10px 0;
+            font-size: 13px;
         }
+
         select {
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
             margin-left: 10px;
+            font-size: 14px;
+            max-width: 100%;
         }
+
         .submit-btn {
-            background: #0056b3;
+            background: var(--primary-color);
             color: #fff;
             border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 6px;
             cursor: pointer;
             margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.2s;
         }
+
         .submit-btn:hover {
-            background: #003d80;
+            background: var(--primary-hover);
+        }
+
+        .match-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
     </style>
 </head>
@@ -115,24 +213,24 @@
 
 <div class="container">
     <h1>Simulasi Prediksi Tes TTC BCA 2026</h1>
-    <p><strong>Target:</strong> Minimal 80% Benar | Klik pada pilihan jawaban untuk mengecek hasil secara instan.</p>
+    <p><strong>Target:</strong> Minimal 80% Benar | Klik pada pilihan jawaban atau tombol verifikasi untuk mengecek hasil secara instan.</p>
 
-    <!-- BAGIAN 1: PILIHAN GANDA 1-100 -->
-    <h2>Bagian I: Soal Pilihan Ganda (1 - 100)</h2>
+    <!-- BAGIAN 1: PILIHAN GANDA -->
+    <h2>Bagian I: Soal Pilihan Ganda (1 - 115)</h2>
     <div id="pg-container"></div>
 
-    <!-- BAGIAN 2: PAKET B PILIHAN GANDA KOMPLEKS -->
-    <h2>Bagian II: Paket B - Pilihan Ganda Kompleks</h2>
+    <!-- BAGIAN 2: PILIHAN GANDA KOMPLEKS -->
+    <h2>Bagian II: Soal Pilihan Ganda Kompleks (1 - 30)</h2>
     <p><em>Pilih semua jawaban yang benar, lalu klik "Cek Jawaban".</em></p>
     <div id="complex-container"></div>
 
-    <!-- BAGIAN 3: PAKET B MENJODOHKAN -->
-    <h2>Bagian III: Paket B - Soal Menjodohkan</h2>
+    <!-- BAGIAN 3: MENJODOHKAN -->
+    <h2>Bagian III: Soal Menjodohkan</h2>
     <div id="match-container"></div>
 </div>
 
 <script>
-// Data Soal Pilihan Ganda (1 - 100)
+// Data Soal Pilihan Ganda (1 - 115)
 const pgData = [
     { n: 1, q: "Tujuan utama pendekatan STEM dalam pembelajaran adalah....", opts: ["A. membuat pembelajaran menggunakan komputer", "B. mengintegrasikan sains, teknologi, rekayasa, dan matematika dalam pemecahan masalah", "C. mengganti seluruh pembelajaran konvensional dengan teknologi", "D. membuat siswa menghafalkan konsep sains", "E. menggunakan aplikasi digital sebanyak mungkin"], ans: 1 },
     { n: 2, q: "Karakteristik paling penting dari pembelajaran berbasis STEM adalah....", opts: ["A. berorientasi pada hafalan", "B. berpusat pada guru", "C. pemecahan masalah nyata melalui integrasi berbagai disiplin ilmu", "D. menggunakan laboratorium setiap pertemuan", "E. selalu menggunakan robot"], ans: 2 },
@@ -233,10 +331,26 @@ const pgData = [
     { n: 97, q: "Jika dua solusi sama-sama dapat menyelesaikan masalah, siswa sebaiknya....", opts: ["A. memilih secara acak", "B. membandingkan berdasarkan kriteria dan bukti", "C. memilih yang paling mahal", "D. memilih yang paling rumit", "E. mengikuti guru"], ans: 1 },
     { n: 98, q: "Penggunaan data dalam proyek STEM penting karena....", opts: ["A. membuat proyek terlihat ilmiah", "B. membantu mengambil keputusan berdasarkan bukti", "C. memperpanjang laporan", "D. menambah jumlah tabel", "E. membuat presentasi menarik"], ans: 1 },
     { n: 99, q: "Inovasi pembelajaran yang baik seharusnya....", opts: ["A. hanya dapat digunakan oleh pembuatnya", "B. memiliki peluang untuk diterapkan dan direplikasi dalam konteks yang relevan", "C. selalu menggunakan teknologi terbaru", "D. membutuhkan biaya tinggi", "E. sangat kompleks"], ans: 1 },
-    { n: 100, q: "Jika harus memilih satu prinsip paling penting dalam merancang inovasi TTC, pilihan terbaik adalah....", opts: ["A. teknologi harus canggih", "B. AI harus digunakan", "C. inovasi harus menjawab masalah nyata dan menghasilkan dampak pembelajaran yang dapat dibuktikan", "D. alat harus mahal", "E. produk harus terlihat futuristik"], ans: 2 }
+    { n: 100, q: "Jika harus memilih satu prinsip paling penting dalam merancang inovasi TTC, pilihan terbaik adalah....", opts: ["A. teknologi harus canggih", "B. AI harus digunakan", "C. inovasi harus menjawab masalah nyata dan menghasilkan dampak pembelajaran yang dapat dibuktikan", "D. alat harus mahal", "E. produk harus terlihat futuristik"], ans: 2 },
+    // Soal Tambahan Tambahan dari Sumber Dokumen Kedua (101-115)
+    { n: 101, q: "Tujuan utama integrasi pendekatan STEM dalam pembelajaran adalah....", opts: ["A. Menggantikan materi teori sepenuhnya dengan praktik komputer", "B. Mengembangkan kemampuan siswa memecahkan masalah nyata melalui kolaborasi lintas disiplin ilmu", "C. Mewajibkan sekolah membeli perangkat teknologi bernilai tinggi", "D. Mengharuskan siswa menghafal algoritma pemrograman"], ans: 1 },
+    { n: 102, q: "Dalam Engineering Design Process, tindakan yang dilakukan setelah membuat dan menguji prototipe awal adalah....", opts: ["A. Langsung mengumpulkan laporan akhir", "B. Melakukan analisis data hasil uji coba dan mengiterasi (memperbaiki) desain jika ada kelemahan", "C. Mengganti ide proyek dengan topik baru yang lebih mudah", "D. Menyimpulkan bahwa proyek berhasil tanpa memperhatikan kekurangan"], ans: 1 },
+    { n: 103, q: "Karakteristik utama dari Deep Learning (Pembelajaran Mendalam) yang membedakannya dari pembelajaran konvensional adalah....", opts: ["A. Jumlah latihan soal yang diberikan jauh lebih banyak", "B. Pembelajaran yang berfokus pada pemahaman makna, keterkaitannya dengan kehidupan nyata, dan refleksi", "C. Siswa dibiarkan belajar mandiri tanpa bantuan guru sama sekali", "D. Seluruh materi disampaikan menggunakan animasi interaktif"], ans: 1 },
+    { n: 104, q: "Perhatikan potongan kode berikut:\na = 15\nb = 4\nprint(a % b)\n\nOutput dari program di atas adalah.... (Catatan: % adalah operator modulo/sisa bagi)", opts: ["A. 3", "B. 3.75", "C. 1", "D. 60"], ans: 2, code: true },
+    { n: 105, q: "Istilah Hallucination dalam konteks penggunaan Generative AI mengacu pada situasi ketika AI....", opts: ["A. Mengalami masalah koneksi internet sehingga tidak menjawab", "B. Mengeluarkan jawaban yang terdengar sangat meyakinkan tetapi sebenarnya salah atau fiktif", "C. Menolak menjawab pertanyaan karena melanggar batasan etika", "D. Menghasilkan respon berupa gambar animasi 3D"], ans: 1 },
+    { n: 106, q: "Mengurai masalah besar dan rumit menjadi bagian-bagian kecil yang lebih mudah dikelola merupakan pilar Computational Thinking yang disebut....", opts: ["A. Decomposition", "B. Pattern Recognition", "C. Abstraction", "D. Algorithm"], ans: 0 },
+    { n: 107, q: "Guru meminta siswa mengamati grafik suhu harian selama sebulan untuk memprediksi cuaca minggu depan. Pilar Computational Thinking yang paling dominan diuji adalah....", opts: ["A. Algorithm", "B. Pattern Recognition", "C. Debugging", "D. Compilation"], ans: 1 },
+    { n: 108, q: "Penyusunan Prompting yang efektif untuk AI pembelajaran harus memenuhi struktur berikut, kecuali....", opts: ["A. Menyebutkan peran (role) yang diinginkan dari AI", "B. Memberikan konteks dan kriteria target siswa", "C. Menulis perintah yang sangat pendek dan tanpa rincian agar AI bebas berasumsi", "D. Menentukan format keluaran yang diharapkan (misal: tabel, poin-poin)"], ans: 2 },
+    { n: 109, q: "Manakah di antara komponen berikut yang berfungsi mendeteksi atau mengukur fenomena fisik (seperti suhu atau cahaya) dalam proyek IoT/Microcontroller?", opts: ["A. Actuator", "B. Sensor", "C. Microprocessor", "D. Power Supply"], ans: 1 },
+    { n: 110, q: "Perhatikan baris kode logika berikut:\nnilai = 82\nif nilai >= 85:\n    print(\"Sangat Baik\")\nelif nilai >= 75:\n    print(\"Baik\")\nelse:\n    print(\"Cukup\")\n\nHasil keluaran dari program tersebut adalah....", opts: ["A. Sangat Baik", "B. Baik", "C. Cukup", "D. Error"], ans: 1, code: true },
+    { n: 111, q: "Proses menemukan dan memperbaiki bug atau kesalahan logika pada baris program dinamakan....", opts: ["A. Compiling", "B. Executing", "C. Debugging", "D. Deploying"], ans: 2 },
+    { n: 112, q: "Dalam kerangka kerja etika digital, tindakan guru yang berisiko melanggar hak privasi siswa saat menggunakan AI adalah....", opts: ["A. Menginput materi buku teks untuk dijadikan kuis", "B. Memasukkan data identitas pribadi dan rekam medis siswa ke platform AI publik", "C. Menggunakan AI untuk mencari ide rancangan bahan ajar", "D. Meminta AI memeriksa tata bahasa dalam modul rancangan sendiri"], ans: 1 },
+    { n: 113, q: "Pembelajaran yang \"menggembirakan\" (joyful learning) dalam konteks pilar TTC BCA dicapai melalui....", opts: ["A. Ketiadaan tes evaluasi dan penilai", "B. Tantangan yang relevan, lingkungan belajar yang aman, eksploratif, serta partisipasi aktif siswa", "C. Bermain game sepanjang waktu tanpa target materi akademis", "D. Penggunaan robot tanpa mempedulikan pemahaman materi"], ans: 1 },
+    { n: 114, q: "Ketika hasil eksperimen siswa menggunakan sensor tidak sesuai dengan teori ilmiah di buku, tindakan paling tepat yang diarahkan oleh guru adalah....", opts: ["A. Meminta siswa mengganti data eksperimen agar cocok dengan teori", "B. Mengajak siswa menguji ulang, memeriksa alat/kalibrasi sensor, dan menganalisis faktor penyebab deviasi", "C. Menganggap proyek gagal dan memberikan nilai nol", "D. Menyuruh siswa menghapus bagian laporan hasil eksperimen"], ans: 1 },
+    { n: 115, q: "Indikator keberhasilan dari pemanfaatan teknologi tepat guna dalam inovasi proyek TTC BCA adalah....", opts: ["A. Ketiadaan keterlibatan manusia dalam proses pembuatan", "B. Biaya pembuatan yang relatif sangat mahal", "C. Terbuktinya dampak positif terhadap ketercapaian pemahaman siswa secara terukur", "D. Tingginya tingkat kesulitan teknologi yang dipakai meskipun tidak dibutuhkan"], ans: 2 }
 ];
 
-// Data Soal Pilihan Ganda Kompleks Paket B
+// Data Soal Pilihan Ganda Kompleks (1 - 30)
 const complexData = [
     { n: 1, q: "Pernyataan yang sesuai dengan pembelajaran berbasis STEM adalah....", opts: ["A. Mengintegrasikan beberapa disiplin ilmu", "B. Berorientasi pada pemecahan masalah", "C. Selalu harus menggunakan komputer", "D. Menghasilkan atau menguji solusi", "E. Menghubungkan pembelajaran dengan masalah nyata"], ans: [0, 1, 3, 4] },
     { n: 2, q: "Yang termasuk karakteristik pembelajaran mendalam adalah....", opts: ["A. Berkesadaran", "B. Bermakna", "C. Menggembirakan", "D. Mengutamakan hafalan", "E. Mendorong refleksi"], ans: [0, 1, 2, 4] },
@@ -252,24 +366,40 @@ const complexData = [
     { n: 12, q: "Sebuah kelompok membuat aplikasi AI untuk membantu siswa memahami Hukum Newton. Agar AI berfungsi sebagai learning assistant, aplikasi sebaiknya....", opts: ["A. Memberikan pertanyaan pemantik", "B. Memberikan umpan balik", "C. Langsung memberikan jawaban akhir setiap saat", "D. Meminta siswa menjelaskan alasan", "E. Membantu siswa melakukan refleksi"], ans: [0, 1, 3, 4] },
     { n: 13, q: "Dalam proyek STEM, prototipe pertama gagal. Respons guru yang paling tepat adalah....", opts: ["A. Mengajak siswa mencari penyebab kegagalan", "B. Menggunakan data pengujian", "C. Memperbaiki desain", "D. Menguji kembali", "E. Menganggap kegagalan sebagai ketidakmampuan siswa"], ans: [0, 1, 2, 3] },
     { n: 14, q: "Agar penggunaan AI tidak menyebabkan ketergantungan siswa, guru dapat....", opts: ["A. Meminta siswa menjelaskan proses berpikirnya", "B. Menggunakan AI sebagai pemberi umpan balik", "C. Membandingkan jawaban AI dengan sumber lain", "D. Membiarkan AI mengerjakan seluruh tugas", "E. Meminta siswa memverifikasi jawaban AI"], ans: [0, 1, 2, 4] },
-    { n: 15, q: "Indikator bahwa sebuah inovasi pembelajaran memiliki potensi kuat untuk dikembangkan adalah....", opts: ["A. Memecahkan masalah nyata", "B. Mudah diuji", "C. Memiliki dampak pembelajaran", "D. Dapat dikembangkan lebih lanjut", "E. Menggunakan teknologi paling mahal"], ans: [0, 1, 2, 3] }
+    { n: 15, q: "Indikator bahwa sebuah inovasi pembelajaran memiliki potensi kuat untuk dikembangkan adalah....", opts: ["A. Memecahkan masalah nyata", "B. Mudah diuji", "C. Memiliki dampak pembelajaran", "D. Dapat dikembangkan lebih lanjut", "E. Menggunakan teknologi paling mahal"], ans: [0, 1, 2, 3] },
+    // Tambahan dari Sumber Kedua (16 - 30)
+    { n: 16, q: "Pilihan aktivitas yang mencerminkan integrasi pendekatan STEM dalam pembelajaran Sains adalah....", opts: ["A. Siswa mengukur efisiensi panel surya dengan memvariasikan sudut kemiringan (Sains & Matematika)", "B. Siswa merancang sistem penyiraman otomatis dengan sensor kelembaban (Teknologi & Rekayasa)", "C. Siswa menghafal definisi energi terbarukan dari buku teks", "D. Siswa mengolah data hasil uji coba alat dan menyajikannya dalam bentuk grafik (Matematika)"], ans: [0, 1, 3] },
+    { n: 17, q: "Aspek utama yang membentuk Deep Learning (Pembelajaran Mendalam) adalah....", opts: ["A. Mindful (Berkesadaran)", "B. Meaningful (Bermakna)", "C. Joyful (Menggembirakan)", "D. Rote Memorization (Hafalan Luar Kepala)"], ans: [0, 1, 2] },
+    { n: 18, q: "Keuntungan utama menggunakan flowchart sebelum mulai menulis kode program adalah....", opts: ["A. Membantu memvisualisasikan alur logika pemecahan masalah", "B. Memudahkan identifikasi kesalahan logika sejak tahap perencanaan", "C. Menggantikan fungsi mikrokontroler dalam memproses data", "D. Mempermudah komunikasi alur program antar anggota tim"], ans: [0, 1, 3] },
+    { n: 19, q: "Risiko atau bahaya yang harus diwaspadai dalam penggunaan Generative AI di dunia pendidikan adalah....", opts: ["A. Bias informasi akibat data pelatihan AI yang tidak adil", "B. Hallucination (penyampaian fakta palsu)", "C. Potensi pelanggaran hak cipta (copyright)", "D. Penurunan kemampuan koneksi internet sekolah secara otomatis"], ans: [0, 1, 2] },
+    { n: 20, q: "Tindakan yang mencerminkan kemampuan metakognisi siswa dalam proyek STEM adalah....", opts: ["A. Siswa mampu menjelaskan mengapa strategi rancangan pertamanya gagal", "B. Siswa dapat mengevaluasi efisiensi langkah kerja yang telah dibuatnya", "C. Siswa secara mandiri menyesuaikan pendekatan belajar ketika menemui kendala", "D. Siswa meniru seluruh langkah guru tanpa mempertanyakan alasannya"], ans: [0, 1, 2] },
+    { n: 21, q: "Penggunaan perangkat sensor dan mikrokontroler (misal: Arduino/ESP32) di kelas bermanfaat untuk....", opts: ["A. Memberikan pengalaman pengumpulan data secara real-time", "B. Melatih keterampilan logika rekayasa dan pemrograman kontekstual", "C. Menghilangkan kebutuhan siswa untuk memahami teori dasar", "D. Menghubungkan konsep abstrak sains dengan aplikasi konkret"], ans: [0, 1, 3] },
+    { n: 22, q: "Mana saja yang merupakan pilar utama dalam Computational Thinking?", opts: ["A. Decomposition", "B. Pattern Recognition", "C. Abstraction", "D. Execution"], ans: [0, 1, 2] },
+    { n: 23, q: "Langkah etis yang perlu dilakukan guru sebelum mengunggah tugas siswa ke platform berbasis AI adalah....", opts: ["A. Memastikan data sensitif/identitas siswa telah dianonimkan", "B. Memeriksa kebijakan privasi dan keamanan data dari platform AI tersebut", "C. Mengabaikan asal-usul penyedia layanan AI", "D. Meminta persetujuan sesuai kebijakan perlindungan data yang berlaku"], ans: [0, 1, 3] },
+    { n: 24, q: "Ciri-ciri struktur perulangan (loop) yang berpotensi menyebabkan program mengalami freeze atau crash adalah....", opts: ["A. Kondisi hentinya (termination condition) tidak pernah tercapai", "B. Terjadi infinite loop (perulangan tak terbatas)", "C. Menggunakan variabel tipe integer", "D. Nilai pembanding tidak pernah diperbarui di dalam blok perulangan"], ans: [0, 1, 3] },
+    { n: 25, q: "Penerapan teknologi yang tepat guna dalam merancang alat bantu ajar ditandai oleh....", opts: ["A. Alat dibuat sesuai dengan kebutuhan dan skala masalah kelas", "B. Menggunakan komponen yang mudah dirawat dan dijangkau secara ekonomis", "C. Selalu menyertakan teknologi terkini meskipun tidak menambah fungsi", "D. Memberikan nilai tambah signifikan terhadap pemahaman siswa"], ans: [0, 1, 3] },
+    { n: 26, q: "Peran guru sebagai facilitator dan co-pilot dalam era kecerdasan buatan (AI) meliputi....", opts: ["A. Membimbing siswa dalam memverifikasi kebenaran keluaran AI", "B. Mengarahkan siswa mengajukan pertanyaan kritis (prompting)", "C. Menyerahkan penentuan nilai akhir siswa sepenuhnya kepada keputusan AI", "D. Memfasilitasi refleksi atas proses penalaran siswa"], ans: [0, 1, 3] },
+    { n: 27, q: "Aktivitas pembelajaran berikut yang melatih keterampilan Critical Thinking siswa terhadap respon AI adalah....", opts: ["A. Mengidentifikasi kesalahan fakta pada teks rangkuman AI", "B. Membandingkan argumen yang dibuat AI dengan dua literatur ilmiah resmi", "C. Menyalin langsung output AI ke dalam lembar kerja", "D. Menganalisis potensi bias perspektif dalam jawaban AI"], ans: [0, 1, 3] },
+    { n: 28, q: "Manakah yang termasuk ke dalam variabel skalar atau tipe data dasar dalam pemrograman?", opts: ["A. Integer (Bilangan bulat)", "B. Float (Bilangan desimal)", "C. Boolean (True/False)", "D. Loop Statement"], ans: [0, 1, 2] },
+    { n: 29, q: "Karakteristik masalah (problem) yang cocok untuk dijadikan topik proyek STEM di sekolah adalah....", opts: ["A. Bersifat terbuka (open-ended) dan memungkinkan beragam solusi", "B. Relevan dengan konteks atau lingkungan sekitar siswa", "C. Hanya memiliki satu jawaban pasti tanpa perlu proses desain", "D. Membutuhkan integrasi pengetahuan dari beberapa mata pelajaran"], ans: [0, 1, 3] },
+    { n: 30, q: "Untuk membangun suasana belajar yang joyful (menggembirakan) namun tetap bermakna, guru dapat....", opts: ["A. Menggunakan strategi pembelajaran berbasis permainan (game-based learning) yang edukatif", "B. Memberikan ruang bagi siswa untuk bereksplorasi tanpa takut dihakimi saat salah", "C. Meniadakan semua bentuk tantangan berpikir", "D. Mengapresiasi proses dan usaha siswa, bukan hanya hasil akhir"], ans: [0, 1, 3] }
 ];
 
 // Data Menjodohkan
 const matchGroups = [
     {
-        title: "C. Menjodohkan - Computatonal Thinking & Dasar",
+        title: "Paket A: Computational Thinking & Dasar Sintaks",
         items: [
-            { id: 16, a: "Decomposition", ans: "B" },
-            { id: 17, a: "Pattern Recognition", ans: "A" },
-            { id: 18, a: "Abstraction", ans: "D" },
-            { id: 19, a: "Algorithm", ans: "C" },
-            { id: 20, a: "Debugging", ans: "E" },
-            { id: 21, a: "Iteration", ans: "F" },
-            { id: 22, a: "Sensor", ans: "G" },
-            { id: 23, a: "Prototype", ans: "H" },
-            { id: 24, a: "Generative AI", ans: "I" },
-            { id: 25, a: "Hallucination", ans: "J" }
+            { id: 1, a: "Decomposition", ans: "B" },
+            { id: 2, a: "Pattern Recognition", ans: "A" },
+            { id: 3, a: "Abstraction", ans: "D" },
+            { id: 4, a: "Algorithm", ans: "C" },
+            { id: 5, a: "Debugging", ans: "E" },
+            { id: 6, a: "Iteration", ans: "F" },
+            { id: 7, a: "Sensor", ans: "G" },
+            { id: 8, a: "Prototype", ans: "H" },
+            { id: 9, a: "Generative AI", ans: "I" },
+            { id: 10, a: "Hallucination", ans: "J" }
         ],
         options: {
             "A": "Menemukan pola", "B": "Memecah masalah", "C": "Langkah sistematis", "D": "Fokus pada informasi penting", "E": "Memperbaiki kesalahan program",
@@ -277,18 +407,18 @@ const matchGroups = [
         }
     },
     {
-        title: "D. Menjodohkan - STEM",
+        title: "Paket B: Integrasi & Konsep STEM",
         items: [
-            { id: 26, a: "Science", ans: "B" },
-            { id: 27, a: "Technology", ans: "D" },
-            { id: 28, a: "Engineering", ans: "C" },
-            { id: 29, a: "Mathematics", ans: "A" },
-            { id: 30, a: "Problem Identification", ans: "E" },
-            { id: 31, a: "Prototype", ans: "F" },
-            { id: 32, a: "Testing", ans: "G" },
-            { id: 33, a: "Data Analysis", ans: "H" },
-            { id: 34, a: "Iteration", ans: "I" },
-            { id: 35, a: "Reflection", ans: "J" }
+            { id: 11, a: "Science", ans: "B" },
+            { id: 12, a: "Technology", ans: "D" },
+            { id: 13, a: "Engineering", ans: "C" },
+            { id: 14, a: "Mathematics", ans: "A" },
+            { id: 15, a: "Problem Identification", ans: "E" },
+            { id: 16, a: "Prototype", ans: "F" },
+            { id: 17, a: "Testing", ans: "G" },
+            { id: 18, a: "Data Analysis", ans: "H" },
+            { id: 19, a: "Iteration", ans: "I" },
+            { id: 20, a: "Reflection", ans: "J" }
         ],
         options: {
             "A": "Menghitung kebutuhan energi", "B": "Menjelaskan prinsip ilmiah", "C": "Merancang solusi", "D": "Menggunakan sensor", "E": "Menentukan masalah",
@@ -296,18 +426,18 @@ const matchGroups = [
         }
     },
     {
-        title: "E. Menjodohkan - AI",
+        title: "Paket C: kecerdasan Buatan (AI) & Literasi Digital",
         items: [
-            { id: 36, a: "Artificial Intelligence", ans: "C" },
-            { id: 37, a: "Generative AI", ans: "E" },
-            { id: 38, a: "Prompt", ans: "A" },
-            { id: 39, a: "Hallucination", ans: "B" },
-            { id: 40, a: "Bias", ans: "D" },
-            { id: 41, a: "Verification", ans: "F" },
-            { id: 42, a: "AI Literacy", ans: "G" },
-            { id: 43, a: "Privacy", ans: "H" },
-            { id: 44, a: "Human Oversight", ans: "I" },
-            { id: 45, a: "Critical Thinking", ans: "J" }
+            { id: 21, a: "Artificial Intelligence", ans: "C" },
+            { id: 22, a: "Generative AI", ans: "E" },
+            { id: 23, a: "Prompt", ans: "A" },
+            { id: 24, a: "Hallucination", ans: "B" },
+            { id: 25, a: "Bias", ans: "D" },
+            { id: 26, a: "Verification", ans: "F" },
+            { id: 27, a: "AI Literacy", ans: "G" },
+            { id: 28, a: "Privacy", ans: "H" },
+            { id: 29, a: "Human Oversight", ans: "I" },
+            { id: 30, a: "Critical Thinking", ans: "J" }
         ],
         options: {
             "A": "Instruksi kepada AI", "B": "Informasi palsu yang dihasilkan AI", "C": "Sistem yang melakukan tugas yang membutuhkan kecerdasan", "D": "Ketidakadilan akibat data/model", "E": "Menghasilkan konten baru",
@@ -315,18 +445,18 @@ const matchGroups = [
         }
     },
     {
-        title: "F. Menjodohkan - Coding",
+        title: "Paket D: Dasar-Dasar Logika Pemrograman",
         items: [
-            { id: 46, a: "Variable", ans: "B" },
-            { id: 47, a: "If/Else", ans: "C" },
-            { id: 48, a: "Loop", ans: "A" },
-            { id: 49, a: "Function", ans: "D" },
-            { id: 50, a: "Input", ans: "E" },
-            { id: 51, a: "Output", ans: "F" },
-            { id: 52, a: "Operator", ans: "G" },
-            { id: 53, a: "Debugging", ans: "H" },
-            { id: 54, a: "Algorithm", ans: "I" },
-            { id: 55, a: "Flowchart", ans: "J" }
+            { id: 31, a: "Variable", ans: "B" },
+            { id: 32, a: "If/Else", ans: "C" },
+            { id: 33, a: "Loop", ans: "A" },
+            { id: 34, a: "Function", ans: "D" },
+            { id: 35, a: "Input", ans: "E" },
+            { id: 36, a: "Output", ans: "F" },
+            { id: 37, a: "Operator", ans: "G" },
+            { id: 38, a: "Debugging", ans: "H" },
+            { id: 39, a: "Algorithm", ans: "I" },
+            { id: 40, a: "Flowchart", ans: "J" }
         ],
         options: {
             "A": "Pengulangan", "B": "Menyimpan data", "C": "Percabangan", "D": "Blok kode yang dapat digunakan kembali", "E": "Data yang masuk",
@@ -334,34 +464,84 @@ const matchGroups = [
         }
     },
     {
-        title: "G. Menjodohkan - Studi Kasus",
+        title: "Paket E: Studi Kasus Pembelajaran & Proyek TTC",
         items: [
-            { id: 56, a: "Siswa hanya menyalin jawaban AI", ans: "A" },
-            { id: 57, a: "Prototipe tidak berfungsi", ans: "B" },
-            { id: 58, a: "Data sensor tidak konsisten", ans: "C" },
-            { id: 59, a: "Siswa tidak memahami konsep", ans: "D" },
-            { id: 60, a: "AI menghasilkan informasi meragukan", ans: "E" },
-            { id: 61, a: "Biaya prototipe terlalu mahal", ans: "F" },
-            { id: 62, a: "Siswa pasif mengikuti tutorial", ans: "G" },
-            { id: 63, a: "Inovasi belum diketahui dampaknya", ans: "H" },
-            { id: 64, a: "Data siswa akan dimasukkan ke AI", ans: "I" },
-            { id: 65, a: "Siswa hanya membuat alat tanpa refleksi", ans: "J" }
+            { id: 41, a: "Siswa hanya menyalin jawaban AI", ans: "A" },
+            { id: 42, a: "Prototipe tidak berfungsi", ans: "B" },
+            { id: 43, a: "Data sensor tidak konsisten", ans: "C" },
+            { id: 44, a: "Siswa tidak memahami konsep", ans: "D" },
+            { id: 45, a: "AI menghasilkan informasi meragukan", ans: "E" },
+            { id: 46, a: "Biaya prototipe terlalu mahal", ans: "F" },
+            { id: 47, a: "Siswa pasif mengikuti tutorial", ans: "G" },
+            { id: 48, a: "Inovasi belum diketahui dampaknya", ans: "H" },
+            { id: 49, a: "Data siswa akan dimasukkan ke AI", ans: "I" },
+            { id: 50, a: "Siswa hanya membuat alat tanpa refleksi", ans: "J" }
         ],
         options: {
             "A": "Verifikasi sumber", "B": "Iterasi", "C": "Periksa sensor dan metode pengukuran", "D": "Hubungkan kembali dengan konsep", "E": "Validasi",
             "F": "Optimasi desain", "G": "Berikan masalah terbuka", "H": "Buat indikator keberhasilan", "I": "Pertimbangkan privasi", "J": "Tambahkan refleksi"
         }
+    },
+    {
+        title: "Paket F: Istilah TTC BCA & Pedagogi Digital",
+        items: [
+            { id: 51, a: "Algorithm", ans: "D" },
+            { id: 52, a: "Abstraction", ans: "H" },
+            { id: 53, a: "Prototype", ans: "A" },
+            { id: 54, a: "Iteration", ans: "B" },
+            { id: 55, a: "Actuator", ans: "C" },
+            { id: 56, a: "Validation / Verification", ans: "E" },
+            { id: 57, a: "Prompt", ans: "F" },
+            { id: 58, a: "AI Bias", ans: "G" },
+            { id: 59, a: "Conditional Statement", ans: "K" },
+            { id: 60, a: "Loop Statement", ans: "I" },
+            { id: 61, a: "Metacognition", ans: "J" },
+            { id: 62, a: "Decomposition", ans: "N" },
+            { id: 63, a: "Deep Learning (Pedagogy)", ans: "L" },
+            { id: 64, a: "Phishing", ans: "M" },
+            { id: 65, a: "Pattern Recognition", ans: "O" }
+        ],
+        options: {
+            "A": "Model awal yang dibuat untuk menguji fungsi rancangan solusi",
+            "B": "Pengulangan proses perbaikan produk/sistem berdasarkan hasil evaluasi uji coba",
+            "C": "Perangkat keras yang mengeksekusi aksi fisik (seperti memutar motor)",
+            "D": "Urutan langkah-langkah logis dan terstruktur untuk menyelesaikan masalah",
+            "E": "Proses pemeriksaan ulang data/fakta dari AI dengan sumber informasi tepercaya",
+            "F": "Instruksi spesifik yang dikirimkan pengguna untuk memandu luaran AI",
+            "G": "Ketidakakuratan atau keberpihakan sistem akibat sampel data yang tidak seimbang",
+            "H": "Mengabaikan informasi yang tidak relevan dan berfokus pada inti masalah",
+            "I": "Struktur logika yang mengulang eksekusi kode selama kondisi tertentu terpenuhi",
+            "J": "Kemampuan untuk menyadari, memantau, dan mengatur proses berpikir diri sendiri",
+            "K": "Penentuan keputusan aliran program berdasarkan pemenuhan syarat (if-else)",
+            "L": "Pendekatan belajar yang menekankan makna, keterkaitan konteks, dan kedalaman pemahaman",
+            "M": "Upaya penipuan digital untuk mencuri data sensitif melalui pesan/tautan palsu",
+            "N": "Memecah komponen masalah kompleks menjadi elemen-elemen kecil yang berdiri sendiri",
+            "O": "Mengidentifikasi kesamaan, tren, atau keteraturan dalam sekumpulan data"
+        }
     }
 ];
 
-// Render Soal Pilihan Ganda 1-100
+// Render Soal Pilihan Ganda
 const pgContainer = document.getElementById('pg-container');
 pgData.forEach(item => {
     const card = document.createElement('div');
     card.className = 'question-card';
     
-    let content = `<div class="question-text">${item.n}. ${item.q.replace(/\n/g, '<br>')}</div>`;
+    let formattedText = item.q;
+    if (item.code) {
+        const parts = item.q.split('\n\n');
+        if (parts.length >= 3) {
+            formattedText = `${parts[0]}<div class="code-block">${parts[1]}</div>${parts[2]}`;
+        } else if (parts.length === 2) {
+            formattedText = `${parts[0]}<div class="code-block">${parts[1]}</div>`;
+        } else {
+            formattedText = item.q.replace(/\n/g, '<br>');
+        }
+    } else {
+        formattedText = item.q.replace(/\n/g, '<br>');
+    }
     
+    let content = `<div class="question-text">${item.n}. ${formattedText}</div>`;
     content += `<ul class="options">`;
     item.opts.forEach((opt, idx) => {
         content += `<li><button class="option-btn" onclick="checkPG(${item.n}, ${idx}, ${item.ans}, this)">${opt}</button></li>`;
@@ -402,11 +582,13 @@ complexData.forEach(item => {
     const card = document.createElement('div');
     card.className = 'question-card';
     
-    let content = `<div class="question-text">P-B${item.n}. ${item.q}</div>`;
+    let content = `<div class="question-text">PGK-${item.n}. ${item.q}</div>`;
     content += `<form id="complex-form-${item.n}">`;
+    content += `<div class="checkbox-group">`;
     item.opts.forEach((opt, idx) => {
-        content += `<div><label><input type="checkbox" name="complex-${item.n}" value="${idx}"> ${opt}</label></div>`;
+        content += `<label class="checkbox-label"><input type="checkbox" name="complex-${item.n}" value="${idx}"> <span>${opt}</span></label>`;
     });
+    content += `</div>`;
     content += `<button type="button" class="submit-btn" onclick="checkComplex(${item.n})">Cek Jawaban</button>`;
     content += `</form>`;
     content += `<div id="feedback-complex-${item.n}" class="feedback"></div>`;
@@ -427,7 +609,7 @@ function checkComplex(qNum) {
     const correctLabels = correct.map(i => String.fromCharCode(65 + i)).join(", ");
     
     if (isCorrect) {
-        feedback.innerText = "Benar! Semua opsi pilihan Anda tepat. (" + correctLabels + ")";
+        feedback.innerText = "Benar! Semua opsi pilihan Anda tepat. (Opsi: " + correctLabels + ")";
         feedback.className = "feedback correct";
     } else {
         feedback.innerText = "Kurang Tepat. Jawaban yang benar adalah opsi: " + correctLabels;
@@ -453,8 +635,10 @@ matchGroups.forEach(group => {
         }
 
         let content = `<div class="question-text">${item.id}. ${item.a}</div>`;
+        content += `<div class="match-row">`;
         content += `<label>Pasangan: <select id="match-select-${item.id}">${selectOptions}</select></label>`;
         content += `<button type="button" class="submit-btn" onclick="checkMatch(${item.id}, '${item.ans}')">Cek</button>`;
+        content += `</div>`;
         content += `<div id="feedback-match-${item.id}" class="feedback"></div>`;
         
         card.innerHTML = content;
@@ -473,10 +657,10 @@ function checkMatch(id, correctAns) {
     }
 
     if (selectedVal === correctAns) {
-        feedback.innerText = "Benar! Pasangannya adalah " + correctAns;
+        feedback.innerText = "Benar! Pasangannya adalah (" + correctAns + ")";
         feedback.className = "feedback correct";
     } else {
-        feedback.innerText = "Salah! Pasangan yang benar adalah " + correctAns;
+        feedback.innerText = "Salah! Pasangan yang benar adalah (" + correctAns + ")";
         feedback.className = "feedback wrong";
     }
     feedback.style.display = "block";
